@@ -13,13 +13,15 @@ import { IFunction, IIdentifier } from "../types/define-expression";
 import React, { useState } from "react";
 import { useSelectedExpressionContext } from "../contexts/SelectedExpressionContext";
 import { usePaginationContext } from "../contexts/PaginationContext";
+import { useSearchExpressionContext } from "../contexts/SearchExpressionContext";
 
 function DefinitionForm() {
-    const { textExpression: selectedExpression, setExpressionText: setExpressionSelected } = useSelectedExpressionContext();
+    const { selectedExpression } = useSearchExpressionContext();
+    const { textExpression, setExpressionText } = useSelectedExpressionContext();
     const { page, setActivePage } = usePaginationContext();
     const [helpText, setHelpText] = useState<string>('Texto de ayuda');
     const [functionItems, setFunctionItems] = useState<IFunction[]>([]);
-    const [identifierItems] = useState<IIdentifier[]>(data.identifiers);
+    const [identifierItems, setIdentifierItems] = useState<IIdentifier[]>(data.identifiers);
 
     React.useEffect(() => {
         fetch(import.meta.env.VITE_API_URL + 'function_').then((response) => {
@@ -27,10 +29,35 @@ function DefinitionForm() {
                 setFunctionItems(data.data as IFunction[]);
             })
         })
+        fetch(import.meta.env.VITE_API_URL + 'identifier_').then((response) => {
+            response.json().then((data) => {
+                setIdentifierItems(data.data as IIdentifier[]);
+            })
+        })
     }, []);
 
     const handleClick = (value: string) => {
-        setExpressionSelected(`${selectedExpression} ${value}`.trim());
+        setExpressionText(`${textExpression} ${value}`.trim());
+    }
+
+    const handleSave = () => {
+        fetch(import.meta.env.VITE_API_URL + 'formula_/' + selectedExpression?.id,
+            {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    ...selectedExpression,
+                    expression_: textExpression
+                })
+            }).then((response) => {
+                response.json().then((data) => {
+                    console.log('Success:', data);
+                }).catch((error) => {
+                    console.error('Error:', error);
+                })
+            })
     }
 
     return (
@@ -41,17 +68,18 @@ function DefinitionForm() {
                 </div>
                 <div className="flex gap-2">
                     <Button color="primary" startDecorator={<DocumentSearchIcon />}>Validar</Button>
-                    <Button color="success" startDecorator={<DocumentCheckIcon />} onClick={() => setActivePage(page + 1)}>Guardar</Button>
+                    <Button color="success" startDecorator={<DocumentCheckIcon />} onClick={handleSave}>Guardar</Button>
                     <Button color="danger" startDecorator={<XCircleIcon />} onClick={() => setActivePage(page - 1)}>Cancelar</Button>
                 </div>
             </div>
-            <div className="mt-4">
+            <div className="mt-4 h-[20vh]">
                 <Textarea
                     color="primary"
                     minRows={2}
                     variant="outlined"
-                    value={selectedExpression}
-                    onChange={(e) => setExpressionSelected(e.target.value)}
+                    value={textExpression}
+                    onChange={(e) => setExpressionText(e.target.value)}
+                    className="w-full h-full"
                 />
             </div>
             <div className="mt-4 mx-8 flex gap-4 items-center">
@@ -70,7 +98,7 @@ function DefinitionForm() {
                 <div className="flex flex-grow flex-col gap-2">
                     <h5>Funciones</h5>
                     <Input placeholder="Categoría" />
-                    <div className="border rounded-md p-2 overflow-auto">
+                    <div className="border bg-white rounded-md p-2 overflow-auto h-[20vh]">
                         <List>
                             {functionItems.map((item, index) => (
                                 <ListItem key={index}>
@@ -83,9 +111,9 @@ function DefinitionForm() {
                 <div className="flex flex-grow flex-col gap-2">
                     <h5>Identificadores</h5>
                     <Input placeholder="Identificador" />
-                    <div className="border rounded-md p-2 overflow-auto">
+                    <div className="border bg-white rounded-md p-2 overflow-auto h-[20vh]">
                         <List>
-                            {identifierItems.map((item, index) => (
+                            {identifierItems && identifierItems.map((item, index) => (
                                 <ListItem key={index}>
                                     <ListItemButton onClick={() => { handleClick(item.value) }}>{item.name}</ListItemButton>
                                 </ListItem>

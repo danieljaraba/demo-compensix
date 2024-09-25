@@ -25,7 +25,7 @@ function App() {
     })
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [page])
 
   return (
     <div className="flex h-[100vh] justify-center items-center">
@@ -33,7 +33,7 @@ function App() {
         <div className="bg-blue-500 rounded-t-lg py-2 px-4">
           <h1 className="font-bold text-white">Construcción Formula</h1>
         </div>
-        <div>
+        <div className="bg-slate-200 rounded-b-md">
           {(() => {
             switch (page) {
               case 0:
@@ -73,7 +73,7 @@ function App() {
             ))}
           </Stepper>
         </div>
-        <div className="p-4">
+        <div className="p-4 bg-slate-200 rounded-md">
           {(() => {
             switch (page) {
               case 0:

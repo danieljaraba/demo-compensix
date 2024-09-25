@@ -14,9 +14,10 @@ import React, { useState } from "react";
 import { useSelectedExpressionContext } from "../contexts/SelectedExpressionContext";
 import { usePaginationContext } from "../contexts/PaginationContext";
 import { useSearchExpressionContext } from "../contexts/SearchExpressionContext";
+import { IExpression } from "../types/search-expression";
 
 function DefinitionForm() {
-    const { selectedExpression } = useSearchExpressionContext();
+    const { selectedExpression, setExpressionSelected } = useSearchExpressionContext();
     const { textExpression, setExpressionText } = useSelectedExpressionContext();
     const { page, setActivePage } = usePaginationContext();
     const [helpText, setHelpText] = useState<string>('Texto de ayuda');
@@ -41,6 +42,10 @@ function DefinitionForm() {
     }
 
     const handleSave = () => {
+        setExpressionSelected({
+            ...selectedExpression,
+            expression_: textExpression
+        } as IExpression);
         fetch(import.meta.env.VITE_API_URL + 'formula_/' + selectedExpression?.id,
             {
                 method: 'PUT',

@@ -29,7 +29,7 @@ function App() {
 
   return (
     <div className="flex h-[100vh] justify-center items-center">
-      <div className="bg-white rounded-lg shadow-lg w-[60vw]">
+      <div className="flex flex-col bg-white rounded-lg shadow-lg w-[60vw] h-[80vh] max-h-[80vh]">
         <div className="bg-blue-500 rounded-t-lg py-2 px-4">
           <h1 className="font-bold text-white">Construcción Formula</h1>
         </div>
@@ -73,7 +73,7 @@ function App() {
             ))}
           </Stepper>
         </div>
-        <div className="p-4 bg-slate-200 rounded-md">
+        <div className="p-4 bg-slate-200 rounded-md flex-grow">
           {(() => {
             switch (page) {
               case 0:

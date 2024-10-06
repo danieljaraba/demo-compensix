@@ -2,11 +2,18 @@ import { Input, Table } from "@mui/joy";
 import { useSelectedExpressionContext } from "../contexts/SelectedExpressionContext";
 import data from '../assets/data.json';
 import { useSearchExpressionContext } from "../contexts/SearchExpressionContext";
+import formatNumber from "../utils/formatNumber";
 
 function SimulationForm() {
     const { textExpression } = useSelectedExpressionContext();
     const { selectedExpression } = useSearchExpressionContext();
     const identifierItems = data.identifiers.filter((item) => textExpression.includes(item.value));
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const rawValue = e.target.value;
+        const formattedValue = formatNumber(Number(rawValue), 2);
+        e.target.value = formattedValue; // Establece el valor formateado directamente en el input
+    };
 
     return (
         <>
@@ -27,7 +34,7 @@ function SimulationForm() {
                             <tr>
                                 <td>{item?.name}</td>
                                 <td>{item?.type}</td>
-                                <td><Input /></td>
+                                <td><Input onChange={handleInputChange} /></td>
                             </tr>
                         ))}
                     </tbody>
@@ -42,7 +49,7 @@ function SimulationForm() {
                     </div>
                     <div className="flex flex-grow gap-2">
                         <h5>Valor</h5>
-                        <p>10000</p>
+                        <p>{formatNumber(10000, 2)}</p>
                     </div>
                 </div>
             </div>

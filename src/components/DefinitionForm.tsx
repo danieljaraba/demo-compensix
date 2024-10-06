@@ -88,16 +88,21 @@ function DefinitionForm() {
                 />
             </div>
             <div className="mt-4 mx-8 flex gap-4 items-center">
-                <div className="flex gap-2">
-                    <div className="flex flex-col gap-2">
-                        <Button><PlusIcon /></Button>
-                        <Button><MultiplyIcon /></Button>
-                        <Button><ParentesisLeftIcon /></Button>
+                <div>
+                    <div className="flex gap-2">
+                        <div className="flex flex-col gap-2">
+                            <Button onClick={() => setExpressionText(`${textExpression} +`.trim())}><PlusIcon /></Button>
+                            <Button onClick={() => setExpressionText(`${textExpression} *`.trim())}><MultiplyIcon /></Button>
+                            <Button onClick={() => setExpressionText(`${textExpression} (`.trim())}><ParentesisLeftIcon /></Button>
+                        </div>
+                        <div className="flex flex-col gap-2">
+                            <Button onClick={() => setExpressionText(`${textExpression} -`.trim())}><MinusIcon /></Button>
+                            <Button onClick={() => setExpressionText(`${textExpression} /`.trim())}><DivideIcon /></Button>
+                            <Button onClick={() => setExpressionText(`${textExpression} )`.trim())}><ParentesisRightIcon /></Button>
+                        </div>
                     </div>
-                    <div className="flex flex-col gap-2">
-                        <Button><MinusIcon /></Button>
-                        <Button><DivideIcon /></Button>
-                        <Button><ParentesisRightIcon /></Button>
+                    <div className="flex mt-2">
+                        <Button color="danger" className="flex-grow" onClick={() => setExpressionText(textExpression.slice(0, -1))}>Eliminar</Button>
                     </div>
                 </div>
                 <div className="flex flex-grow flex-col gap-2">
@@ -128,7 +133,7 @@ function DefinitionForm() {
                 </div>
             </div>
             <div className="mt-4">
-                <h4 className="font-bold">Ayuda</h4>
+                <h4 className="font-bold">Descripción</h4>
                 <p>{helpText}</p>
             </div>
         </>

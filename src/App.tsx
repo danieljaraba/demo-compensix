@@ -73,7 +73,7 @@ function App() {
             ))}
           </Stepper>
         </div>
-        <div className="p-4 bg-slate-200 rounded-md flex-grow">
+        <div className="p-4 bg-slate-200 rounded-md flex-grow overflow-y-auto">
           {(() => {
             switch (page) {
               case 0:

@@ -65,6 +65,26 @@ function DefinitionForm() {
             })
     }
 
+    const handleDeleteAtCursor = () => {
+        const textarea = document.querySelector('textarea');
+        const start = textarea?.selectionStart;
+        const end = textarea?.selectionEnd;
+
+        if (start !== undefined && end !== undefined && start > 0) {
+            // Elimina el carácter en la posición del cursor
+            const newText = textExpression.slice(0, start - 1) + textExpression.slice(end);
+            setExpressionText(newText);
+
+            // Coloca el cursor en la nueva posición
+            setTimeout(() => {
+                if (textarea) {
+                    textarea.setSelectionRange(start - 1, start - 1);
+                    textarea.focus();
+                }
+            }, 0);
+        }
+    };
+
     return (
         <>
             <div className="flex justify-between items-end">
@@ -102,7 +122,7 @@ function DefinitionForm() {
                         </div>
                     </div>
                     <div className="flex mt-2">
-                        <Button color="danger" className="flex-grow" onClick={() => setExpressionText(textExpression.slice(0, -1))}>Eliminar</Button>
+                        <Button color="danger" className="flex-grow" onClick={handleDeleteAtCursor}>Eliminar</Button>
                     </div>
                 </div>
                 <div className="flex flex-grow flex-col gap-2">
